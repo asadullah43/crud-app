@@ -1,3 +1,4 @@
+import 'package:crud_app/view_model/splash_services.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -8,8 +9,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SplashServices splashScreen = SplashServices();
   @override
   void initState() {
+    splashScreen.isLogin(context);
     super.initState();
   }
 

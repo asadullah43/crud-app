@@ -17,11 +17,37 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordcontroller = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formkey = GlobalKey<FormState>();
+  FocusNode emailFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
   @override
   void dispose() {
     super.dispose();
     emailcontroller.dispose();
     passwordcontroller.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+  }
+
+  void login() {
+    setState(() {
+      loading = true;
+    });
+    _auth
+        .signInWithEmailAndPassword(
+            email: emailcontroller.text.toString(),
+            password: passwordcontroller.text.toString())
+        .then((value) {
+      setState(() {
+        loading = false;
+      });
+      Navigator.pushNamed(context, RoutesName.dataScreen);
+      Utils().flushBarErrorMessage('Login Successfull', context);
+    }).onError((error, stackTrace) {
+      setState(() {
+        loading = false;
+      });
+      Utils().flushBarErrorMessage(error.toString(), context);
+    });
   }
 
   @override
@@ -43,6 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             border: OutlineInputBorder(),
                             labelText: 'Email',
                             hintText: 'Enter Email'),
+                        onFieldSubmitted: ((value) {
+                          Utils.fieldFocusChange(
+                              context, emailFocusNode, passwordFocusNode);
+                        }),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Enter email';
@@ -74,28 +104,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           loading: loading,
                           title: 'Login',
                           onPress: () {
-                            setState(() {
-                              loading = true;
-                            });
-                            _auth
-                                .signInWithEmailAndPassword(
-                                    email: emailcontroller.text.toString(),
-                                    password:
-                                        passwordcontroller.text.toString())
-                                .then((value) {
-                              setState(() {
-                                loading = false;
-                              });
-                              Navigator.pushNamed(context, RoutesName.home);
+                            if (emailcontroller.text.isEmpty) {
+                              Utils()
+                                  .flushBarErrorMessage("Enter email", context);
+                            } else if (passwordcontroller.text.isEmpty) {
                               Utils().flushBarErrorMessage(
-                                  'Login Successfull', context);
-                            }).onError((error, stackTrace) {
-                              setState(() {
-                                loading = false;
-                              });
+                                  "Enter password", context);
+                            } else if (passwordcontroller.text.length < 6) {
                               Utils().flushBarErrorMessage(
-                                  error.toString(), context);
-                            });
+                                  "Enter 6 digit password", context);
+                            } else {
+                              login();
+                            }
                           }),
                       const SizedBox(
                         height: 5,
@@ -103,7 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       Align(
                         alignment: Alignment.bottomRight,
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, RoutesName.forgotPassword);
+                            },
                             child: const Text('Forgot Password')),
                       ),
                       const SizedBox(

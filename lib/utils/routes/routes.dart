@@ -1,10 +1,12 @@
 import 'package:crud_app/utils/routes/routes_name.dart';
+import 'package:crud_app/view/auth/forgot_password.dart';
 import 'package:crud_app/view/auth/login_screen.dart';
 import 'package:crud_app/view/auth/signup_screen.dart';
 import 'package:crud_app/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../view/home_screen.dart';
+import '../../view/add_data_screen.dart';
+import '../../view/data_screen.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -13,9 +15,15 @@ class Routes {
         return MaterialPageRoute(
             builder: (BuildContext context) => const SplashScreen());
 
-      case RoutesName.home:
+      case RoutesName.addData:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const HomeScreen());
+            builder: (BuildContext context) => const AddDataScreen());
+      case RoutesName.forgotPassword:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const ForgotPasswordScreen());
+      case RoutesName.dataScreen:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const DataScreen());
 
       case RoutesName.login:
         return MaterialPageRoute(

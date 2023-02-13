@@ -26,6 +26,28 @@ class _SignupScreenState extends State<SignupScreen> {
     passwordcontroller.dispose();
   }
 
+  void signUp() {
+    setState(() {
+      loading = true;
+    });
+    _auth
+        .createUserWithEmailAndPassword(
+            email: emailcontroller.text.toString(),
+            password: passwordcontroller.text.toString())
+        .then((value) {
+      setState(() {
+        loading = false;
+      });
+      Navigator.pushNamed(context, RoutesName.dataScreen);
+      Utils().flushBarErrorMessage('User Register Successfuly', context);
+    }).onError((error, stackTrace) {
+      setState(() {
+        loading = false;
+      });
+      Utils().flushBarErrorMessage(error.toString(), context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,27 +97,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       loading: loading,
                       title: 'Sign Up',
                       onPress: () {
-                        setState(() {
-                          loading = true;
-                        });
-                        _auth
-                            .createUserWithEmailAndPassword(
-                                email: emailcontroller.text.toString(),
-                                password: passwordcontroller.text.toString())
-                            .then((value) {
-                          setState(() {
-                            loading = false;
-                          });
-                          Navigator.pushNamed(context, RoutesName.home);
-                          Utils().flushBarErrorMessage(
-                              'User Register Successfuly', context);
-                        }).onError((error, stackTrace) {
-                          setState(() {
-                            loading = false;
-                          });
+                        if (emailcontroller.text.isEmpty) {
+                          Utils().flushBarErrorMessage("Enter email", context);
+                        } else if (passwordcontroller.text.isEmpty) {
                           Utils()
-                              .flushBarErrorMessage(error.toString(), context);
-                        });
+                              .flushBarErrorMessage("Enter password", context);
+                        } else if (passwordcontroller.text.length < 6) {
+                          Utils().flushBarErrorMessage(
+                              "Enter 6 digit password", context);
+                        } else {
+                          signUp();
+                        }
                       }),
                   const SizedBox(
                     height: 5,
