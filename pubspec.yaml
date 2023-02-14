@@ -42,6 +42,7 @@ dependencies:
   firebase_storage: ^11.0.11
   firebase_database: ^10.0.10
   another_flushbar: ^1.12.29
+  provider: ^6.0.5
  
 
 dev_dependencies:

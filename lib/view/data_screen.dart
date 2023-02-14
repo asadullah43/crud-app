@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/utils.dart';
+import '../view_model/signout_view_model.dart';
 
 class DataScreen extends StatefulWidget {
   const DataScreen({super.key});
@@ -19,6 +20,7 @@ class _DataScreenState extends State<DataScreen> {
   final ref = FirebaseFirestore.instance.collection('users');
 
   final editControler = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,11 +31,7 @@ class _DataScreenState extends State<DataScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              auth.signOut().then((value) {
-                Navigator.pushNamed(context, RoutesName.login);
-              }).onError((error, stackTrace) {
-                Utils().flushBarErrorMessage(error.toString(), context);
-              });
+              SignOutViewModel(context).signOut();
             },
             icon: const Icon(Icons.logout_outlined),
           ),
@@ -58,7 +56,7 @@ class _DataScreenState extends State<DataScreen> {
               builder: ((BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: const CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
                   const Text('Some erorr');
@@ -139,6 +137,7 @@ class _DataScreenState extends State<DataScreen> {
                       'title': editControler.text,
                     }).then((value) {
                       Utils().flushBarErrorMessage('Post update', context);
+                      Navigator.pushNamed(context, RoutesName.dataScreen);
                     }).onError((error, stackTrace) {
                       Utils().flushBarErrorMessage(error.toString(), context);
                     });

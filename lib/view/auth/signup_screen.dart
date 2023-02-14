@@ -1,10 +1,10 @@
 import 'package:crud_app/res/components/round_button.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/utils.dart';
+import '../../res/components/email_field.dart';
+import '../../res/components/password_field.dart';
+import '../../view_model/signup_services.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -16,36 +16,27 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   bool loading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final emailcontroller = TextEditingController();
-  final passwordcontroller = TextEditingController();
-  final _formkey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  FocusNode emailFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
+  final _formKey = GlobalKey<FormState>();
   @override
   void dispose() {
     super.dispose();
-    emailcontroller.dispose();
-    passwordcontroller.dispose();
+    emailController.dispose();
+    passwordController.dispose();
   }
 
-  void signUp() {
-    setState(() {
-      loading = true;
-    });
-    _auth
-        .createUserWithEmailAndPassword(
-            email: emailcontroller.text.toString(),
-            password: passwordcontroller.text.toString())
-        .then((value) {
-      setState(() {
-        loading = false;
-      });
-      Navigator.pushNamed(context, RoutesName.dataScreen);
-      Utils().flushBarErrorMessage('User Register Successfuly', context);
-    }).onError((error, stackTrace) {
-      setState(() {
-        loading = false;
-      });
-      Utils().flushBarErrorMessage(error.toString(), context);
-    });
+  void onSignUpButtonPressed() {
+    if (_formKey.currentState!.validate()) {
+      SignUpServices.login(
+        context: context,
+        auth: _auth,
+        emailController: emailController,
+        passwordController: passwordController,
+      );
+    }
   }
 
   @override
@@ -55,16 +46,14 @@ class _SignupScreenState extends State<SignupScreen> {
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Form(
-              key: _formkey,
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    controller: emailcontroller,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Email',
-                        hintText: 'Enter Email'),
+                  EmailTextFormField(
+                    controller: emailController,
+                    emailFocusNode: emailFocusNode,
+                    passwordFocusNode: passwordFocusNode,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Enter email';
@@ -76,12 +65,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  TextFormField(
-                    controller: passwordcontroller,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Password',
-                        hintText: 'Enter Password'),
+                  PasswordTextFormField(
+                    controller: passwordController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Enter email';
@@ -96,19 +81,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   RoundButton(
                       loading: loading,
                       title: 'Sign Up',
-                      onPress: () {
-                        if (emailcontroller.text.isEmpty) {
-                          Utils().flushBarErrorMessage("Enter email", context);
-                        } else if (passwordcontroller.text.isEmpty) {
-                          Utils()
-                              .flushBarErrorMessage("Enter password", context);
-                        } else if (passwordcontroller.text.length < 6) {
-                          Utils().flushBarErrorMessage(
-                              "Enter 6 digit password", context);
-                        } else {
-                          signUp();
-                        }
-                      }),
+                      onPress: onSignUpButtonPressed),
                   const SizedBox(
                     height: 5,
                   ),
