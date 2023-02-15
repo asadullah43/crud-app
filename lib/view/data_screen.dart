@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crud_app/res/components/show_dialog.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../res/constant.dart';
-import '../utils/utils.dart';
+
 import '../view_model/signout_view_model.dart';
 
 class DataScreen extends StatefulWidget {
@@ -81,16 +83,21 @@ class _DataScreenState extends State<DataScreen> {
                           IconButton(
                             color: Constant.kBlueColor,
                             onPressed: () {
-                              showEditDialog(title,
-                                  snapshot.data!.docs[index].id.toString());
+                              ShowDialog().showEditDialog(
+                                  title,
+                                  snapshot.data!.docs[index].id.toString(),
+                                  'Edit Data ',
+                                  'Update',
+                                  context);
                             },
                             icon: const Icon(Icons.edit),
                           ),
                           IconButton(
                             color: Constant.kErrorBarIndicatorColor,
                             onPressed: () {
-                              showDeleteDialog(
-                                  snapshot.data!.docs[index].id.toString());
+                              ShowDialog().showDeleteDialog(
+                                  snapshot.data!.docs[index].id.toString(),
+                                  context);
                             },
                             icon: const Icon(Icons.delete_outline),
                           ),
@@ -104,81 +111,6 @@ class _DataScreenState extends State<DataScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> showEditDialog(String title, String id) async {
-    editController.text = title;
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: const Text('Update Your Post'),
-              content: TextField(
-                controller: editController,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: Constant.kErrorBarIndicatorColor),
-                  ),
-                ),
-                TextButton(
-                    onPressed: () async {
-                      final ref = FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(id);
-                      await ref.update({
-                        'title': editController.text,
-                      }).then((value) {
-                        Utils().showSuccessToast('Post Update');
-                      }).onError((error, stackTrace) {
-                        Utils().flushBarErrorMessage(error.toString(), context);
-                      });
-                      Navigator.pushNamed(context, RoutesName.dataScreen);
-                    },
-                    child: const Text('Update')),
-              ]);
-        });
-  }
-
-  Future<void> showDeleteDialog(String id) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to delete this post?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                final ref =
-                    FirebaseFirestore.instance.collection('users').doc(id);
-                await ref.delete().then((value) {
-                  Utils().showSuccessToast('Post deleted');
-                }).onError((error, stackTrace) {
-                  Utils().flushBarErrorMessage(error.toString(), context);
-                });
-                Navigator.pushNamed(context, RoutesName.dataScreen);
-              },
-              child: const Text('Delete',
-                  style: TextStyle(color: Constant.kErrorBarIndicatorColor)),
-            )
-          ],
-        );
-      },
     );
   }
 }
