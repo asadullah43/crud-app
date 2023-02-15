@@ -55,7 +55,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     loading = false;
                   });
                   Utils()
-                      .showSuccessToast('Email has been send to you', context);
+                      .showSuccessToast('Email has been send to you');
                 }).onError((error, stackTrace) {
                   setState(() {
                     loading = false;

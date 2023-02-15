@@ -122,7 +122,7 @@ class _DataScreenState extends State<DataScreen> {
                       await ref.update({
                         'title': editController.text,
                       }).then((value) {
-                        Utils().showSuccessToast('Post Update', context);
+                        Utils().showSuccessToast('Post Update');
                       }).onError((error, stackTrace) {
                         Utils().flushBarErrorMessage(error.toString(), context);
                       });
@@ -152,7 +152,7 @@ class _DataScreenState extends State<DataScreen> {
                 final ref =
                     FirebaseFirestore.instance.collection('users').doc(id);
                 await ref.delete().then((value) {
-                  Utils().showSuccessToast('Post deleted', context);
+                  Utils().showSuccessToast('Post deleted');
                 }).onError((error, stackTrace) {
                   Utils().flushBarErrorMessage(error.toString(), context);
                 });

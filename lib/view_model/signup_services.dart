@@ -16,7 +16,7 @@ class SignUpServices {
             password: passwordController.text.toString())
         .then((value) {
       Navigator.pushNamed(context, RoutesName.dataScreen);
-      Utils().showSuccessToast('User Register Successfully', context);
+      Utils().showSuccessToast('User Register Successfully');
     }).onError((error, stackTrace) {
       Utils().flushBarErrorMessage(error.toString(), context);
     });

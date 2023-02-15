@@ -13,7 +13,7 @@ class SignOutViewModel {
   Future<void> signOut() async {
     await auth.signOut().then((value) {
       Navigator.pushNamed(context, RoutesName.login);
-      Utils().showSuccessToast('Sign out Successfully', context);
+      Utils().showSuccessToast('Sign out Successfully');
     }).onError((error, stackTrace) {
       Utils().flushBarErrorMessage(error.toString(), context);
     });

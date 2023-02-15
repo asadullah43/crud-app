@@ -57,7 +57,7 @@ class Utils {
     );
   }
 
-  void showSuccessToast(String message, BuildContext context) {
+  void showSuccessToast(String message) {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
