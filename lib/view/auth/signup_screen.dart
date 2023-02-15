@@ -42,7 +42,19 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Center(child: Text('Sign Up'))),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: const Center(
+            child: Text(
+              'SIGN UP',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ),
+          automaticallyImplyLeading: false,
+        ),
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Form(
@@ -83,12 +95,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       title: 'Sign Up',
                       onPress: onSignUpButtonPressed),
                   const SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already hava an account?"),
+                      const Text(
+                        "Already hava an account?",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
                       TextButton(
                           onPressed: () {
                             Navigator.pushNamed(context, RoutesName.login);

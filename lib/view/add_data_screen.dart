@@ -52,7 +52,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     loading = false;
                     Navigator.pushNamed(context, RoutesName.dataScreen);
                   });
-                  Utils().flushBarErrorMessage('data added', context);
+                  Utils().showSuccessToast('data added', context);
                 }).onError((error, stackTrace) {
                   setState(() {
                     loading = false;

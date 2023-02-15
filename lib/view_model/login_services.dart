@@ -16,7 +16,7 @@ class LoginServices {
             password: passwordController.text.toString())
         .then((value) {
       Navigator.pushNamed(context, RoutesName.dataScreen);
-      Utils().flushBarErrorMessage('Login Successfull', context);
+      Utils().showSuccessToast('Login Successfully', context);
     }).onError((error, stackTrace) {
       Utils().flushBarErrorMessage(error.toString(), context);
     });

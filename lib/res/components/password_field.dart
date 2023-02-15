@@ -16,9 +16,26 @@ class PasswordTextFormField extends StatelessWidget {
       controller: controller,
       focusNode: FocusNode(),
       obscureText: true,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: 'Enter Password',
-        prefixIcon: Icon(Icons.lock),
+        prefixIcon: const Icon(Icons.lock),
+        fillColor: Colors.grey[200],
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade400),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.red.shade300),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.red.shade300),
+        ),
       ),
       validator: validator,
     );

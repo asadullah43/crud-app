@@ -1,10 +1,10 @@
-import 'package:crud_app/res/color.dart';
 import 'package:flutter/material.dart';
 
 class RoundButton extends StatelessWidget {
   final String title;
   final bool loading;
   final VoidCallback onPress;
+
   const RoundButton({
     Key? key,
     required this.title,
@@ -17,18 +17,37 @@ class RoundButton extends StatelessWidget {
     return InkWell(
       onTap: onPress,
       child: Container(
-        height: 40,
+        height: 50,
         decoration: BoxDecoration(
-            color: buttonColor, borderRadius: BorderRadius.circular(10)),
+          gradient: const LinearGradient(
+            colors: [Colors.purple, Colors.pink],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Center(
-            child: loading
-                ? const CircularProgressIndicator(
-                    color: whiteColor,
-                  )
-                : Text(
-                    title,
-                    style: const TextStyle(color: whiteColor),
-                  )),
+          child: loading
+              ? const CircularProgressIndicator(
+                  color: Colors.white,
+                )
+              : Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+        ),
       ),
     );
   }

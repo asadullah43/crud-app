@@ -45,7 +45,20 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Center(child: Text('LOGIN'))),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Center(
+          child: Text(
+            'LOGIN',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ),
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Form(
@@ -74,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: passwordController,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Enter email';
+                        return 'Enter password';
                       } else {
                         return null;
                       }
@@ -97,7 +110,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, RoutesName.forgotPassword);
                       },
-                      child: const Text('Forgot Password'),
+                      child: const Text(
+                        'Forgot Password',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(
@@ -106,7 +124,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account?"),
+                      const Text(
+                        "Don't have an account?",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, RoutesName.signup);

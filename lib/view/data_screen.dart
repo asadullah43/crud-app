@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 
 import '../utils/utils.dart';
@@ -19,7 +18,7 @@ class _DataScreenState extends State<DataScreen> {
   final fireStore = FirebaseFirestore.instance.collection('users').snapshots();
   final ref = FirebaseFirestore.instance.collection('users');
 
-  final editControler = TextEditingController();
+  final editController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,116 +34,135 @@ class _DataScreenState extends State<DataScreen> {
             },
             icon: const Icon(Icons.logout_outlined),
           ),
-          const SizedBox(
-            width: 10,
-          )
+          const SizedBox(width: 10),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (() {
+        onPressed: () {
           Navigator.pushNamed(context, RoutesName.addData);
-        }),
+        },
         child: const Icon(Icons.add),
       ),
       body: Column(
         children: [
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           StreamBuilder<QuerySnapshot>(
-              stream: fireStore,
-              builder: ((BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (snapshot.hasError) {
-                  const Text('Some erorr');
-                }
-                return Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          final title =
-                              snapshot.data!.docs[index]['title'].toString();
+            stream: fireStore,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return const Text('Some error');
+              }
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final title =
+                        snapshot.data!.docs[index]['title'].toString();
 
-                          return ListTile(
-                            title: Text(
-                                snapshot.data!.docs[index]['title'].toString()),
-                            subtitle:
-                                Text(snapshot.data!.docs[index].id.toString()),
-                            trailing: PopupMenuButton(
-                              icon: const Icon(Icons.more_vert),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                    value: 1,
-                                    child: ListTile(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        showMyDialog(
-                                            title,
-                                            snapshot.data!.docs[index].id
-                                                .toString());
-                                      },
-                                      leading: const Icon(Icons.edit),
-                                      title: const Text('Edit'),
-                                    )),
-                                PopupMenuItem(
-                                    value: 1,
-                                    child: ListTile(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        ref
-                                            .doc(snapshot.data!.docs[index].id
-                                                .toString())
-                                            .delete();
-                                      },
-                                      leading: const Icon(Icons.delete_outline),
-                                      title: const Text('Delete'),
-                                    ))
-                              ],
-                            ),
-                          );
-                        }));
-              })),
+                    return ListTile(
+                      title: Text(title),
+                      subtitle: Text(snapshot.data!.docs[index].id.toString()),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              showEditDialog(title,
+                                  snapshot.data!.docs[index].id.toString());
+                            },
+                            icon: const Icon(Icons.edit),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showDeleteDialog(
+                                  snapshot.data!.docs[index].id.toString());
+                            },
+                            icon: const Icon(Icons.delete_outline),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
   }
 
-  Future<void> showMyDialog(String title, String id) async {
-    editControler.text = title;
+  Future<void> showEditDialog(String title, String id) async {
+    editController.text = title;
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Update'),
-            content: TextField(
-              controller: editControler,
-              decoration: const InputDecoration(hintText: 'edit here'),
-            ),
-            actions: [
-              TextButton(
+              title: const Text('Update'),
+              content: TextField(
+                controller: editController,
+                decoration: const InputDecoration(hintText: 'Edit here'),
+              ),
+              actions: [
+                TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Cancel')),
-              TextButton(
-                  onPressed: () async {
-                    final ref =
-                        FirebaseFirestore.instance.collection('users').doc(id);
-                    await ref.update({
-                      'title': editControler.text,
-                    }).then((value) {
-                      Utils().flushBarErrorMessage('Post update', context);
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                    onPressed: () async {
+                      final ref = FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(id);
+                      await ref.update({
+                        'title': editController.text,
+                      }).then((value) {
+                        Utils().showSuccessToast('Post Update', context);
+                      }).onError((error, stackTrace) {
+                        Utils().flushBarErrorMessage(error.toString(), context);
+                      });
                       Navigator.pushNamed(context, RoutesName.dataScreen);
-                    }).onError((error, stackTrace) {
-                      Utils().flushBarErrorMessage(error.toString(), context);
-                    });
-                  },
-                  child: const Text('Update'))
-            ],
-          );
+                    },
+                    child: const Text('Update')),
+              ]);
         });
+  }
+
+  Future<void> showDeleteDialog(String id) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Are you sure you want to delete this post?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final ref =
+                    FirebaseFirestore.instance.collection('users').doc(id);
+                await ref.delete().then((value) {
+                  Utils().showSuccessToast('Post deleted', context);
+                }).onError((error, stackTrace) {
+                  Utils().flushBarErrorMessage(error.toString(), context);
+                });
+                Navigator.pushNamed(context, RoutesName.dataScreen);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
