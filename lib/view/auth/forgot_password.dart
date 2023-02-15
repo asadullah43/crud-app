@@ -1,3 +1,4 @@
+import 'package:crud_app/res/constant.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -20,7 +21,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Forgot Password')),
+      appBar: AppBar(
+        title: const Text('Forgot Password'),
+        backgroundColor: Constant.kAppbarClr,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -54,8 +58,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   setState(() {
                     loading = false;
                   });
-                  Utils()
-                      .showSuccessToast('Email has been send to you');
+                  Utils().showSuccessToast('Email has been send to you');
                 }).onError((error, stackTrace) {
                   setState(() {
                     loading = false;

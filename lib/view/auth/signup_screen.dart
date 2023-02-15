@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../res/components/email_field.dart';
 import '../../res/components/password_field.dart';
-import '../../view_model/signup_services.dart';
+import '../../res/constant.dart';
+import '../../view_model/signup_view_model.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -43,13 +44,13 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Constant.kWhiteColor,
           elevation: 0,
           title: const Center(
             child: Text(
               'SIGN UP',
               style: TextStyle(
-                color: Colors.black,
+                color: Constant.kBlackColor,
               ),
             ),
           ),
@@ -103,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       const Text(
                         "Already hava an account?",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Constant.kBlackColor,
                         ),
                       ),
                       TextButton(

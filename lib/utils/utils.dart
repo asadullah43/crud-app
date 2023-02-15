@@ -3,6 +3,8 @@ import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../res/constant.dart';
+
 class Utils {
   static void fieldFocusChange(
       BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
@@ -20,35 +22,26 @@ class Utils {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Constant.kWhiteColor,
           ),
         ),
         messageText: Text(
           message,
           style: const TextStyle(
             fontSize: 16,
-            color: Colors.white,
+            color: Constant.kWhiteColor,
           ),
         ),
         icon: const Icon(
           Icons.error_outline,
           size: 28.0,
-          color: Colors.white,
+          color: Constant.kWhiteColor,
         ),
         duration: const Duration(seconds: 4),
         leftBarIndicatorColor: Colors.red,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
-        backgroundGradient: LinearGradient(
-          colors: [Colors.red.shade900, Colors.red.shade600],
-        ),
-        boxShadows: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        backgroundGradient: Constant.kErrorBackgroundGradient,
+        boxShadows: Constant.kErrorBoxShadows,
         isDismissible: true,
         dismissDirection: FlushbarDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
@@ -62,8 +55,8 @@ class Utils {
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
+      backgroundColor: Constant.kSuccessToastBackgroundColor,
+      textColor: Constant.kWhiteColor,
       fontSize: 16.0,
     );
   }

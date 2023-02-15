@@ -1,10 +1,11 @@
 import 'package:crud_app/res/components/round_button.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
-import 'package:crud_app/view_model/login_services.dart';
+import 'package:crud_app/view_model/login_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../res/components/email_field.dart';
 import '../../res/components/password_field.dart';
+import '../../res/constant.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -45,15 +46,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Constant.kWhiteColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Constant.kWhiteColor,
         elevation: 0,
         title: const Center(
           child: Text(
             'LOGIN',
             style: TextStyle(
-              color: Colors.black,
+              color: Constant.kBlackColor,
             ),
           ),
         ),
@@ -113,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text(
                         'Forgot Password',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Constant.kBlackColor,
                         ),
                       ),
                     ),
@@ -127,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Text(
                         "Don't have an account?",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Constant.kBlackColor,
                         ),
                       ),
                       TextButton(

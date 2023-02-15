@@ -1,3 +1,4 @@
+import 'package:crud_app/res/constant.dart';
 import 'package:flutter/material.dart';
 
 class RoundButton extends StatelessWidget {
@@ -19,30 +20,19 @@ class RoundButton extends StatelessWidget {
       child: Container(
         height: 50,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Colors.purple, Colors.pink],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
+          gradient: Constant.kRoundBtnGradient,
+          boxShadow: Constant.kRoundBtnShadow,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: loading
               ? const CircularProgressIndicator(
-                  color: Colors.white,
+                  color: Constant.kWhiteColor,
                 )
               : Text(
                   title,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: Constant.kWhiteColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),

@@ -5,6 +5,8 @@ import 'package:crud_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../res/constant.dart';
+
 class AddDataScreen extends StatefulWidget {
   const AddDataScreen({super.key});
 
@@ -23,6 +25,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
       appBar: AppBar(
         title: const Text('Add Data'),
         centerTitle: true,
+        backgroundColor: Constant.kAppbarClr,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),

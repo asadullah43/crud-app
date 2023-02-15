@@ -3,6 +3,7 @@ import 'package:crud_app/utils/routes/routes_name.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../res/constant.dart';
 import '../utils/utils.dart';
 import '../view_model/signout_view_model.dart';
 
@@ -25,8 +26,9 @@ class _DataScreenState extends State<DataScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        backgroundColor: Constant.kAppbarClr,
         centerTitle: true,
-        title: const Text('Post screen firestore'),
+        title: const Text('Post Screen'),
         actions: [
           IconButton(
             onPressed: () {
@@ -37,11 +39,18 @@ class _DataScreenState extends State<DataScreen> {
           const SizedBox(width: 10),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, RoutesName.addData);
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Container(
+        decoration: const BoxDecoration(
+          gradient: Constant.kRoundBtnGradient,
+          shape: BoxShape.circle,
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, RoutesName.addData);
+          },
+          backgroundColor: Colors.transparent,
+          child: const Icon(Icons.add),
+        ),
       ),
       body: Column(
         children: [
@@ -70,6 +79,7 @@ class _DataScreenState extends State<DataScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
+                            color: Constant.kBlueColor,
                             onPressed: () {
                               showEditDialog(title,
                                   snapshot.data!.docs[index].id.toString());
@@ -77,6 +87,7 @@ class _DataScreenState extends State<DataScreen> {
                             icon: const Icon(Icons.edit),
                           ),
                           IconButton(
+                            color: Constant.kErrorBarIndicatorColor,
                             onPressed: () {
                               showDeleteDialog(
                                   snapshot.data!.docs[index].id.toString());
@@ -102,17 +113,19 @@ class _DataScreenState extends State<DataScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: const Text('Update'),
+              title: const Text('Update Your Post'),
               content: TextField(
                 controller: editController,
-                decoration: const InputDecoration(hintText: 'Edit here'),
               ),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Cancel'),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Constant.kErrorBarIndicatorColor),
+                  ),
                 ),
                 TextButton(
                     onPressed: () async {
@@ -145,7 +158,9 @@ class _DataScreenState extends State<DataScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+              ),
             ),
             TextButton(
               onPressed: () async {
@@ -158,8 +173,9 @@ class _DataScreenState extends State<DataScreen> {
                 });
                 Navigator.pushNamed(context, RoutesName.dataScreen);
               },
-              child: const Text('Delete'),
-            ),
+              child: const Text('Delete',
+                  style: TextStyle(color: Constant.kErrorBarIndicatorColor)),
+            )
           ],
         );
       },
