@@ -7,13 +7,14 @@ import '../utils/utils.dart';
 class EditViewModel {
   Future<void> edit(BuildContext context, String title, String id) async {
     final ref = FirebaseFirestore.instance.collection('users').doc(id);
-    await ref.update({
-      'title': title,
-    }).then((value) {
+    try {
+      await ref.update({
+        'title': title,
+      });
+      Navigator.pushNamed(context, RoutesName.dataScreen);
       Utils().showSuccessToast('Post Update');
-    }).onError((error, stackTrace) {
+    } catch (error) {
       Utils().flushBarErrorMessage(error.toString(), context);
-    });
-    Navigator.pushNamed(context, RoutesName.dataScreen);
+    }
   }
 }

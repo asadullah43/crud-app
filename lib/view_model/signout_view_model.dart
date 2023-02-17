@@ -11,11 +11,12 @@ class SignOutViewModel {
   SignOutViewModel(this.context);
 
   Future<void> signOut() async {
-    await auth.signOut().then((value) {
+    try {
+      await auth.signOut();
       Navigator.pushNamed(context, RoutesName.login);
       Utils().showSuccessToast('Sign out Successfully');
-    }).onError((error, stackTrace) {
+    } catch (error) {
       Utils().flushBarErrorMessage(error.toString(), context);
-    });
+    }
   }
 }

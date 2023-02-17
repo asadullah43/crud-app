@@ -44,29 +44,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: 50,
             ),
             RoundButton(
+              loading: loading,
               title: 'Forgot Password',
-              onPress: () {
+              onPress: () async {
                 Navigator.pushNamed(context, RoutesName.login);
                 setState(() {
                   loading = true;
                 });
 
-                auth
-                    .sendPasswordResetEmail(
-                        email: emailController.text.toString())
-                    .then((value) {
+                try {
+                  setState(() {
+                    loading = true;
+                  });
+                  await FirebaseAuth.instance.sendPasswordResetEmail(
+                      email: emailController.text.toString());
                   setState(() {
                     loading = false;
                   });
-                  Utils().showSuccessToast('Email has been send to you');
-                }).onError((error, stackTrace) {
+                  Utils().showSuccessToast('Email has been sent to you');
+                } catch (error) {
                   setState(() {
                     loading = false;
                   });
                   Utils().flushBarErrorMessage(error.toString(), context);
-                });
+                }
               },
-              loading: loading,
             )
           ],
         ),

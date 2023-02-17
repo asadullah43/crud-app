@@ -42,8 +42,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final signUpViewModel = Provider.of<SignUpViewModel>(context);
-    print('build');
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Constant.kWhiteColor,
@@ -93,10 +91,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  RoundButton(
-                      loading: signUpViewModel.loading,
-                      title: 'Sign Up',
-                      onPress: () => onSignUpButtonPressed(signUpViewModel)),
+                  Consumer<SignUpViewModel>(
+                      builder: (context, signUpViewModel, child) {
+                    return RoundButton(
+                        loading: signUpViewModel.loading,
+                        title: 'Sign Up',
+                        onPress: () => onSignUpButtonPressed(signUpViewModel));
+                  }),
                   const SizedBox(
                     height: 10,
                   ),

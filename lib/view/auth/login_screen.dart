@@ -45,7 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loginViewModel = Provider.of<LoginViewModel>(context);
     return Scaffold(
       backgroundColor: Constant.kWhiteColor,
       appBar: AppBar(
@@ -98,11 +97,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  RoundButton(
-                    loading: loginViewModel.loading,
-                    title: 'Login',
-                    onPress: () => onLoginButtonPressed(loginViewModel),
-                  ),
+                  Consumer<LoginViewModel>(
+                      builder: (context, loginViewModel, child) {
+                    return RoundButton(
+                      loading: loginViewModel.loading,
+                      title: 'Login',
+                      onPress: () => onLoginButtonPressed(loginViewModel),
+                    );
+                  }),
                   const SizedBox(
                     height: 5,
                   ),

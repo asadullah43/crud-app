@@ -29,43 +29,51 @@ class _AddDataScreenState extends State<AddDataScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(children: [
-          const SizedBox(
-            height: 30,
-          ),
-          TextFormField(
-            controller: addController,
-            maxLines: 4,
-            decoration: const InputDecoration(
-                hintText: 'What is in your mind', border: OutlineInputBorder()),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          RoundButton(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: addController,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                  hintText: 'What is in your mind',
+                  border: OutlineInputBorder()),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            RoundButton(
               loading: loading,
               title: 'Add',
-              onPress: () {
+              onPress: () async {
+                setState(() {
+                  loading = true;
+                });
                 Navigator.pushNamed(context, RoutesName.dataScreen);
                 String id = DateTime.now().microsecondsSinceEpoch.toString();
-                fireStore.doc(id).set({
-                  'title': addController.text.toString(),
-                  'id': id,
-                }).then((value) {
+                try {
+                  await fireStore.doc(id).set({
+                    'title': addController.text.toString(),
+                    'id': id,
+                  });
                   setState(() {
                     loading = false;
                     Navigator.pushNamed(context, RoutesName.dataScreen);
                   });
                   Utils().showSuccessToast('data added');
-                }).onError((error, stackTrace) {
+                } catch (error) {
                   setState(() {
                     loading = false;
                     Navigator.pushNamed(context, RoutesName.dataScreen);
                   });
                   Utils().flushBarErrorMessage(error.toString(), context);
-                });
-              }),
-        ]),
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
