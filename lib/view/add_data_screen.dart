@@ -43,6 +43,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
             height: 30,
           ),
           RoundButton(
+              loading: loading,
               title: 'Add',
               onPress: () {
                 Navigator.pushNamed(context, RoutesName.dataScreen);

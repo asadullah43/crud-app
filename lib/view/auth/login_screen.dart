@@ -3,6 +3,7 @@ import 'package:crud_app/utils/routes/routes_name.dart';
 import 'package:crud_app/view_model/login_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../res/components/email_field.dart';
 import '../../res/components/password_field.dart';
 import '../../res/constant.dart';
@@ -15,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool loading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -32,9 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordFocusNode.dispose();
   }
 
-  void onLoginButtonPressed() {
+  void onLoginButtonPressed(LoginViewModel loginViewModel) {
     if (_formKey.currentState!.validate()) {
-      LoginViewModel.login(
+      loginViewModel.login(
         context: context,
         auth: _auth,
         emailController: emailController,
@@ -45,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loginViewModel = Provider.of<LoginViewModel>(context);
     return Scaffold(
       backgroundColor: Constant.kWhiteColor,
       appBar: AppBar(
@@ -98,9 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 20,
                   ),
                   RoundButton(
-                    loading: loading,
+                    loading: loginViewModel.loading,
                     title: 'Login',
-                    onPress: onLoginButtonPressed,
+                    onPress: () => onLoginButtonPressed(loginViewModel),
                   ),
                   const SizedBox(
                     height: 5,

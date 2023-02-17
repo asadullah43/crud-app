@@ -3,22 +3,32 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
 
-class SignUpServices {
-  static void login({
+class SignUpViewModel with ChangeNotifier {
+  bool _loading = false;
+  bool get loading => _loading;
+  void setLoading(bool load) {
+    _loading = load;
+    notifyListeners();
+  }
+
+  Future<void> signUp({
     required BuildContext context,
     required FirebaseAuth auth,
     required TextEditingController emailController,
     required TextEditingController passwordController,
-  }) {
-    auth
-        .createUserWithEmailAndPassword(
-            email: emailController.text.toString(),
-            password: passwordController.text.toString())
-        .then((value) {
+  }) async {
+    setLoading(true);
+    try {
+      await auth.createUserWithEmailAndPassword(
+          email: emailController.text.toString(),
+          password: passwordController.text.toString());
+
+      setLoading(false);
       Navigator.pushNamed(context, RoutesName.dataScreen);
       Utils().showSuccessToast('User Register Successfully');
-    }).onError((error, stackTrace) {
+    } catch (error) {
+      setLoading(false);
       Utils().flushBarErrorMessage(error.toString(), context);
-    });
+    }
   }
 }

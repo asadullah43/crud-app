@@ -3,22 +3,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
 
-class LoginViewModel {
-  static void login({
+class LoginViewModel with ChangeNotifier {
+  bool _loading = false;
+
+  bool get loading => _loading;
+
+  void setLoading(bool load) {
+    _loading = load;
+    notifyListeners();
+  }
+
+  Future<void> login({
     required BuildContext context,
     required FirebaseAuth auth,
     required TextEditingController emailController,
     required TextEditingController passwordController,
-  }) {
-    auth
-        .signInWithEmailAndPassword(
-            email: emailController.text.toString(),
-            password: passwordController.text.toString())
-        .then((value) {
+  }) async {
+    try {
+      setLoading(true);
+      await auth.signInWithEmailAndPassword(
+          email: emailController.text.toString(),
+          password: passwordController.text.toString());
+      setLoading(false);
       Navigator.pushNamed(context, RoutesName.dataScreen);
       Utils().showSuccessToast('Login Successfully');
-    }).onError((error, stackTrace) {
+    } catch (error) {
+      setLoading(false);
       Utils().flushBarErrorMessage(error.toString(), context);
-    });
+    }
   }
 }

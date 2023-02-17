@@ -1,5 +1,6 @@
 import 'package:crud_app/utils/routes/routes_name.dart';
 import 'package:crud_app/view_model/login_view_model.dart';
+import 'package:crud_app/view_model/signup_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,13 +19,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => SignUpViewModel())
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: RoutesName.splash,
+        onGenerateRoute: Routes.generateRoute,
       ),
-      initialRoute: RoutesName.splash,
-      onGenerateRoute: Routes.generateRoute,
     );
   }
 }

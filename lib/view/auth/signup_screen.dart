@@ -2,6 +2,7 @@ import 'package:crud_app/res/components/round_button.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../res/components/email_field.dart';
 import '../../res/components/password_field.dart';
 import '../../res/constant.dart';
@@ -15,7 +16,6 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  bool loading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -29,9 +29,9 @@ class _SignupScreenState extends State<SignupScreen> {
     passwordController.dispose();
   }
 
-  void onSignUpButtonPressed() {
+  void onSignUpButtonPressed(SignUpViewModel signUpViewModel) {
     if (_formKey.currentState!.validate()) {
-      SignUpServices.login(
+      signUpViewModel.signUp(
         context: context,
         auth: _auth,
         emailController: emailController,
@@ -42,6 +42,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final signUpViewModel = Provider.of<SignUpViewModel>(context);
+    print('build');
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Constant.kWhiteColor,
@@ -92,9 +94,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: 20,
                   ),
                   RoundButton(
-                      loading: loading,
+                      loading: signUpViewModel.loading,
                       title: 'Sign Up',
-                      onPress: onSignUpButtonPressed),
+                      onPress: () => onSignUpButtonPressed(signUpViewModel)),
                   const SizedBox(
                     height: 10,
                   ),
