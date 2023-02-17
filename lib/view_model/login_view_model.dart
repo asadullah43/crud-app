@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_app/utils/routes/routes_name.dart';
 
-class LoginServices {
+class LoginViewModel {
   static void login({
     required BuildContext context,
     required FirebaseAuth auth,

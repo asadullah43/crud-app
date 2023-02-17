@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void onLoginButtonPressed() {
     if (_formKey.currentState!.validate()) {
-      LoginServices.login(
+      LoginViewModel.login(
         context: context,
         auth: _auth,
         emailController: emailController,
